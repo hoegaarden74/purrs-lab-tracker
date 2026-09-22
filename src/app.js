@@ -1,6 +1,10 @@
 import {courses,courseById,GOAL} from './data/courses.js';
 import {createStore,STORAGE_KEY} from './state.js';
 import {registerJourneyReader} from './webmcp.js';
+// Keep focus management accessible while showing rings only for keyboard input.
+document.documentElement.dataset.inputMode='pointer';
+window.addEventListener('pointerdown',()=>{document.documentElement.dataset.inputMode='pointer'},{capture:true,passive:true});
+window.addEventListener('keydown',event=>{if(!event.metaKey&&!event.ctrlKey&&!event.altKey&&['Tab','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter',' '].includes(event.key))document.documentElement.dataset.inputMode='keyboard'},{capture:true});
 const app=document.getElementById('app'),dialog=document.getElementById('modal'),toastEl=document.getElementById('toast');
 const $=(s,p=app)=>p.querySelector(s);const n=x=>Math.round(x).toLocaleString('ko-KR');
 const iconPaths={arrow:'<path d="M7 17 17 7M7 7h10v10"/>',right:'<path d="M4 12h16m-6-6 6 6-6 6"/>',back:'<path d="M20 12H4m6-6-6 6 6 6"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',map:'<path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Zm6-3v15m6-12v15"/>',book:'<path d="M3 3h6a4 4 0 0 1 3 2 4 4 0 0 1 3-2h6v17h-6a4 4 0 0 0-3 2 4 4 0 0 0-3-2H3V3Zm9 2v17"/>',route:'<circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M9 6h7a4 4 0 0 1 0 8H8a4 4 0 0 0 0 8"/>',settings:'<path d="M4 7h16M4 17h16M8 4v6m8 4v6"/>',locate:'<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/>',fit:'<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/>',lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/>',post:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>',home:'<path d="m3 10 9-7 9 7v11h-6v-7H9v7H3V10Z"/>'};
